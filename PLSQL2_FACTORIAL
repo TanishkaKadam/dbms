@@ -18,7 +18,7 @@ edit fact.sql
 
 
 
-WRITE THIS CODE IN NOTEPAD
+WRITE THIS CODE IN NOTEPAD with filename fact.sql
 /*
 DECLARE
     num NUMBER := &input_number;  
