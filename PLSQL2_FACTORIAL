@@ -1,0 +1,59 @@
+Write a PL/SQL block to calculate factorial. Use Exception Handling for negative number
+
+
+
+CREATE TABLE factorial_input (
+    input_number NUMBER PRIMARY KEY
+    );
+CREATE TABLE factorial_result (
+        input_number NUMBER,
+      factorial_result NUMBER,
+      CONSTRAINT fk_input FOREIGN KEY (input_number) REFERENCES factorial_input(input_number)
+    );
+edit fact.sql
+
+
+
+
+
+
+
+WRITE THIS CODE IN NOTEPAD
+/*
+DECLARE
+    num NUMBER := &input_number;  
+    fact NUMBER := 1;             
+BEGIN
+    INSERT INTO factorial_input (input_number)
+    VALUES (num);
+    
+    IF num < 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Factorial is not defined for negative numbers.');
+    ELSE
+        FOR i IN 1..num LOOP
+            fact := fact * i;
+        END LOOP;
+        
+        INSERT INTO factorial_result (input_number, factorial_result)
+        VALUES (num, fact);     
+        DBMS_OUTPUT.PUT_LINE('Factorial of ' || num || ' is: ' || fact);
+    END IF;
+    COMMIT; 
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        ROLLBACK; 
+END;
+*/
+
+
+
+
+
+
+ @fact.sql
+SELECT * FROM factorial_input;
+SELECT * FROM factorial_result;
+set serveroutput on;
+@fact.sql
+
