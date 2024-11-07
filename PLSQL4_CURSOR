@@ -1,0 +1,159 @@
+Cursors: (All types: Implicit, Explicit, Cursor FOR Loop, Parameterized Cursor) Write a PL/SQL block of code using parameterized Cursor, that will merge the data available in the newly created table N_RollCall with the data available in the table O_RollCall. If the data in the first table already exist in the second table then that data should be skipped. Frame the separate problem statement for writing PL/SQL block to implement all types
+Note: You have to execute any two type of cursor which is specified in your problem statement or a merging of two tables using parameterized cursor.
+
+
+
+Create table Cust_New(ID number, Name Varchar2(10), City Varchar2(10), Salary number);
+Create table Cust_Old(ID number, Name Varchar2(10), City Varchar2(10), Salary number);
+insert into Cust_New Values ( 1,'Ajay', 'Pune', 20000); 
+insert into Cust_New Values ( 2,'Ramesh','Pune', 15000);
+ insert into Cust_New Values ( 3,'Umesh', 'Pune', 40000);
+ insert into Cust_New Values ( 4,'Ram', 'Pune', 25000);
+insert into Cust_Old Values ( 1,'Ramesh','Pune', 15000);
+ insert into Cust_Old Values ( 5,'Sunil', 'Pune', 45000);
+desc cust_old;
+desc cust_new;
+select * from cust_old;
+select * from cust_new;
+edit cur.sql
+
+
+
+
+
+WRITE THIS CODE IN NOTEPAD WITH FILENAME : cur.sql
+/*
+Declare
+ no cust_new.id%type;
+ totrecord number; 
+begin 
+no:=&no; 
+select id into no from cust_new where id=no; 
+if(SQL%found) then 
+totrecord:=sql%rowcount; 
+end if; 
+end;
+*/
+
+
+
+
+
+set serveroutput on;
+@cur.sql
+edit cur1.sql
+
+
+
+
+
+write this code in notepad with filename :cur1.sql
+/*
+declare 
+cursor c1 is select * from cust_new;
+ c1_id cust_new.id%type; 
+c1_name cust_new.name%type; 
+c1_city cust_new.city%type; 
+c1_sal cust_new.salary%type; 
+begin 
+open c1; 
+loop 
+fetch c1 into c1_id,c1_name,c1_city,c1_sal;
+ exit when c1%notfound;
+ dbms_output.put_line(c1_id||' '||c1_name||' '||c1_city||''||c1_sal); 
+end loop; 
+close c1;
+ end;
+*/
+
+
+
+
+@cur1.sql
+edit cur2.sql
+
+
+
+
+
+write this code in notepad with filename :cur2.sql
+/*
+declare 
+cursor fc is select * from Cust_New where salary>=25000;
+ tmp fc%rowtype;
+ begin 
+dbms_output.put_line('ID Name City Salary');
+ for tmp in fc 
+loop 
+dbms_output.put_line(tmp.id || ' ' || tmp.name || ' ' || tmp.city || ' ' || tmp.salary); 
+end loop; 
+end;
+*/
+
+
+
+
+
+@cur2.sql
+edit cur3.sql
+
+
+
+
+write this code in notepad with filename :cur3.sql
+/*
+declare 
+cursor pc(c_id number) is SELECT * FROM Cust_New where id=c_id; 
+tmp pc%rowtype; 
+begin 
+dbms_output.put_line('ID Name City Salary'); 
+for tmp in pc(2) 
+LOOP 
+dbms_output.put_line(tmp.id || ' ' || tmp.name || ' ' || tmp.city || ' ' || tmp.salary); 
+END LOOP; 
+END;
+*/
+
+
+
+
+
+@cur3.sql
+edit cur4.sql
+
+
+
+
+
+
+write this code in notepad with filename :cur4.sql
+/*
+DECLARE
+ CURSOR PARAM_CURSOR(c_id number) is SELECT * FROM Cust_Old where ID=c_id; 
+cur_cust_old PARAM_CURSOR%rowtype; flag number; 
+BEGIN 
+flag:=0;
+ FOR v_cust_new IN (SELECT id, name, city, salary from cust_new)
+ LOOP
+ FOR cur_cust_old IN PARAM_CURSOR(v_cust_new.id)
+ LOOP 
+update cust_old set name = v_cust_new.name, city = v_cust_new.city, salary=v_cust_new.salary where id = v_cust_new.id;
+ flag:=1;
+ END LOOP; 
+If flag=0 Then 
+insert into cust_old values (v_cust_new.id, v_cust_new.name, 
+v_cust_new.city,v_cust_new.salary); 
+end if; 
+flag:=0;
+ END LOOP; 
+END;
+*/
+
+
+
+
+
+
+@cur4.sql
+select * from cust_old;
+select * from cust_new;
