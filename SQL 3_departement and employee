@@ -1,0 +1,130 @@
+Design at least 10 SQL queries for suitable database application using SQL DML statements: Insert, Select, Update, delete with operators, functions, and set operator. 
+1)	Create table Department with fields deptno, dname, location.
+2)	Insert records in the department table.
+Deptno	Dname	Location
+10	Accounting 	Mumbai 
+20	Research 	Pune 
+30	Sales 	Nashik
+40	Operations 	Nagpur 
+
+3)	List the department information.
+4)	Create table employee with Empno, Ename, Job, Mgr, Joined_date, Salary, Commission, Deptno
+5)	Insert records into employee table.
+Empno
+	Ename	Job	Mgr	Joined_date	Salary 	Commission	Deptno	Address 
+1001	Nilesh joshi	Clerk	1005	17-dec-95	2800	600	20	Nashik
+1002	Avinashpawar	Salesman	1003	20-feb-96	5000	1200	30	Nagpur 
+1003	Amit kumar	Manager	1004	2-apr-86	2000	----	30	Pune 
+1004	Nitinkulkarni	President 	--	19-apr-86	50000	----	10	Mumbai 
+1005	Niraj Sharma 	Analyst 	1003	3-dec-98	12000	----	20	Satara
+1006	Pushkardeshpande	Salesman 	1003	1-sep-96	6500	1500	30	Pune 
+1007	Sumitpatil	Manager 	1004	1-may-91	25000	----	20	Mumbai
+1008	Ravi sawant	Analyst 	1007	17-nov-95	10000	----	---	Amaravati
+
+6)	Write a query to display employee information. Write a name of column explicitly.
+7)	Add column phone number in the employee table and add not null constraints.
+8)	Create a query to display unique jobs from the table.
+9)	Change the location of dept 40  to Banglore instead of Nagpur.
+10)	Delete Pushkar deshpande from employee table.
+11)	Create a table department_temp table from deptarment table, only create the structure not content.
+12)	Insert rows into department_temp table from deptarment table
+13)	Change the name of the employees 1003 to Nikhil Gosavi.
+14)	Display the list of employee whose salary between 5000 and 20000.
+15)	Display the list of employee excluding job title as ‘salesman’.
+16)	Display all those employees whose job title is either  ‘manager’ or ‘analyst’(write by using OR & IN operator).
+17)	Display the employee name & department number of all employees in dept 10,20,30& 40.
+18)	Display the employee number, name, job & commission of all employees who do not get any commission.
+19)	Display the name & salary of all employees whose salary not in the range of 5000 & 10000.
+20)	Find all names & joined date of employees whose names starts with ‘A’.
+21)	 Find all names of employees having ‘i’ as a second letter in their names.
+22)	Find employee number, name of employees whose commission is not null.
+23)	Display all employee information in the descending order of employee number.
+24)	Display the minimum, maximum, sum & average salary of each job type.
+25)	Write a query to display the number of employee with the same department.
+26)	Select employee number, ename according to the annual salary in ascending order.
+27)	Find the department number, maximum salary where the maximum salary is greater than 5000.
+28)	Find all distinct column values from employee & department table.
+29)	Find all column values with duplicate from employee & department table.
+30)	Find all column values which are common in both employee & department table.
+31)	Find all distinct column values present in employee but not in department table.
+32)	Display the number of employees in the department 30 who can earn a commission 
+
+
+
+
+
+
+
+
+
+create table Department(dept_no int primary key, dept_name varchar(15), location varchar(10)); 
+           
+create table Depart(dept_no int primary key, dept_name varchar(15), location varchar(10));
+desc Depart;
+
+ create table empl(emp_no int primary key, emp_name varchar(20), job varchar(15), mgr int, join_date date, salary int, comm int, address varchar(10), dept_no int references Depart(dept_no));
+ desc empl;
+
+insert into Depart values(10, 'Accounting', 'Mumbai');
+
+insert into Depart values(20, 'Research', 'Pune');
+insert into Depart values(30, 'Sales', 'Nashik');
+ insert into Depart values(40, 'Operations', 'Nagpur');
+ COMMIT;
+ select * from Depart;
+ 
+insert into empl values(1001, 'Nilesh Joshi', 'Clerk', 1005, '17-DEC-1995', 28000, 600, 'Nashik', 20);
+
+insert into empl values(1002, 'Avinash Pawar', 'SalesMan', 1003, '25-FEB-1996', 5000, 1200, 'Nagpur', 30);
+insert into empl values(1003, 'Amit Kumar', 'Manager', 1004, '02-APR-1986',2000, NULL, 'Pune', 30);
+
+insert into empl values(1004, 'Nitin Kulkarni', 'President', NULL, '19-APR-1986', 50000, NULL, 'Mumbai', 10);
+insert into empl values(1005, 'Neeraj Sharma', 'Analyst', 1003, '03-DEC-1998', 12000, NULL, 'SATARA', 20);
+insert into empl values(1006, 'Pushkar Deshpande', 'SalesMAn', 1003, '01-SEP-1996', 6500, 1500, 'Pune', 30);
+COMMIT;
+ set linesize 210;
+
+ select * from empl;
+ select emp_no, emp_name, job, mgr, join_date, salary, comm, address, dept_no from empl;
+ select distinct (job) from empl;
+
+update Depart set location='Banglore' where dept_no = 40;
+select * from Depart;
+ update empl set emp_name='Nikhil Gosavi' where emp_no = 1003;
+ select * from empl;
+delete from empl where emp_name='Pushkar Deshpande';
+select * from empl;
+create table depart_temp as select * from Depart where dept_no=1;
+ desc depart_temp;
+ 
+  select * from depart_temp; 
+ create table temp1 as select * from Depart;
+select * from temp1;
+
+select * from empl where salary between 5000 and 20000;
+select * from empl where job != 'SalesMan';
+select * from empl where job in ('Manager', 'Analyst');
+select emp_name, dept_no from empl where dept_no in (10, 20, 30, 40);
+select emp_no, emp_name, job, comm from empl where comm = NULL; 
+select emp_no, emp_name, job, comm from empl where comm is NULL;
+select emp_name, salary from empl where salary not in (5000, 10000);
+select emp_name, join_date from empl where emp_name Like 'A%';
+select emp_name from empl where emp_name Like '_i%';
+select emp_no, emp_name from empl where comm is not NULL;
+select * from empl order by emp_no desc;
+      
+select min(salary), max(salary), avg(salary), sum(salary) from empl;
+       
+select min(salary), max(salary), avg(salary), sum(salary) from empl group by job;
+ select min(salary), max(salary), avg(salary), sum(salary), job from empl group by job;
+select count(*) from empl group by dept_no;
+select dept_no, count(*) from empl group by dept_no;
+select emp_no, emp_name, salary*12 from empl order by salary*12;
+select dept_no, max(salary) from empl group by dept_no having max(salary)>5000;
+   
+select dept_no from empl UNION select dept_no from Depart;
+select dept_no from empl UNION ALL select dept_no from Depart;
+select dept_no from empl INTERSECT select dept_no from Depart;
+ select dept_no from empl MINUS select dept_no from Depart; 
+select count(*) from empl where dept_no = 30 AND comm is not NULL;
+  
