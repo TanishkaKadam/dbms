@@ -1,0 +1,77 @@
+Database Trigger (All Types: Row level and Statement level triggers, Before and After Triggers). Write a database trigger on Library table. The System should keep track of the records that are being updated or deleted. The old value of updated or deleted records should be added in Library_ Audit table. Frame the problem statement for writing Database Triggers of all types, in-line with above statement. The problem statement should clearly state the requirements.
+
+
+create table Library(book_id int, book_name varchar(20), book_price int);
+desc Library;
+create table Library_Audit(book_id int, book_name varchar(20), book_price int, audit_change varchar(10), update_time date);
+desc Library_Audit;
+insert into Library values(1, 'Book1', 225);
+insert into Library values(2, 'Book2', 345);
+insert into Library values(3, 'Book3', 1015);
+insert into Library values(4, 'Book4', 553);
+COMMIT;
+select * from library;
+edit trig1.sql;
+
+
+
+
+
+WRITE THIS CODE IN NOTEPAD WITH FILENAME trigl.sql
+/*  create or replace trigger trig1 after delete or update on Library for each row 
+declare 
+auch varchar(15); 
+begin if deleting then 
+auch := 'delete'; 
+end if; 
+if updating then 
+auch := 'update'; 
+end if;
+ insert into Library_Audit values(:old.book_id, :old.book_name, :old.book_price, auch, current_timestamp); 
+end;  */
+
+
+
+
+
+
+@trig1.sql
+update Library set book_name = 'Python Programming' where book_id = 4;
+select * from Library_Audit;
+select * from Library;
+delete from Library where book_id = 1;
+select * from Library_Audit;
+create table Audit_Change1 (book_id int, aud_change varchar(10), update_time timestamp);
+desc Audit_Change1;
+edit trig2.sql
+
+
+
+
+
+
+WRITE THIS CODE IN NOTEPAD WITH FILENAME trig2.sql
+/* create or replace trigger trig2 before delete or update on Library 
+declare 
+auch varchar(15); 
+begin if deleting then 
+auch := 'delete';
+ end if; 
+if updating then
+ auch := 'update'; 
+end if; 
+insert into Audit_Change1 values(s1.nextval, auch, current_timestamp); 
+end; /
+*/
+
+
+
+
+
+
+@trig2.sql
+update Library  set book_name = 'KORTH' where book_id = 2;
+select * from Library_Audit;
+select * from Audit_Change1;
+select * from Library;
+
