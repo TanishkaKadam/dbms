@@ -1,0 +1,61 @@
+Unnamed PL/SQL code block: Use of Control structure and Exception handling is mandatory. Suggested Problem statement: Consider Tables: 1. Borrower(Roll_no, Name, DateofIssue, NameofBook, Status) 2. Fine(Roll_no,Date,Amt) 
+Accept Roll_no and NameofBook from user.
+ • Check the number of days (from date of issue). 
+• If days are between 15 to 30 then fine amount will be Rs 5per day.
+ • If no. of days>30, per day fine will be Rs 50 per day and for days less than 30, Rs. 5 per day.
+ • After submitting the book, status will change from I to R. 
+• If condition of fine is true, then details will be stored into fine table. 
+• Also handles the exception by named exception handler or user define exception handler.
+Write a PL/SQL block to calculate factorial. Use Exception Handling for negative number
+
+
+
+
+ Create table Borrower(Roll number, SName Varchar2(10), DateofIssue date, 
+BookName Varchar2(15), Status varchar2(1));
+Create table Fine(Roll number, CurrentDate date, Amt number);
+Insert into Borrower values(1,’ajay’,’9-jun-17’,‘book1’,’I’);
+desc borrower;
+ desc fine;
+ select * from borrower;
+select * from fine; 
+
+
+
+
+3.Write PL/SQL block IN NOTEPAD
+
+/*
+
+edit cur.sql
+declare 
+e1 exception;
+ rollno Borrower.Roll%TYPE; 
+bname Borrower.BooKName%TYPE;
+B_Issuse_Date date;
+ Days number(4); 
+fine_amt number(10); 
+begin 
+rollno:=&rollno; bname:='&bname'; if(SQL%notfound) then raise e1; 
+end if;
+Select DateofIssue into B_Issuse_Date from Borrower where Roll = rollno and 
+BookName = bname;
+Days := SYSDATE - B_Issuse_Date;
+DBMS_OUTPUT.PUT_LINE ('Total Days :'||Days); if(Days<=15)then fine_amt:=0;
+DBMS_OUTPUT.PUT_LINE ('No fine...........'); elsif (Days between 16 and 30)then fine_amt:=(days-15)*5;
+insert into Fine values(rollno, SYSDATE, fine_amt); else
+fine_amt:=(Days-30)*50+(15*5);
+insert into Fine values(rollno,SYSDATE,fine_amt); end if;
+UPDATE Borrower SET Status = 'R' WHERE Roll=rollno; exception when e1 then
+DBMS_OUTPUT.PUT_LINE('not found'); 
+end; 
+/
+
+*/
+
+
+
+@cur (command to run PL/SQL block) 
+select * from fine;
+      
+
