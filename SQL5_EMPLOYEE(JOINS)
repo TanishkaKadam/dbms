@@ -1,0 +1,95 @@
+Design at least 10 SQL queries for suitable database application using SQL DML statements: all types of Join, Sub-Query and View.
+Employee(employee_name,street,city)
+Works(employee_name,company_name,salary)
+Company(company_name,city)
+Manages(employee_name,manager_name)
+
+1. Find the names of employees who work for First Bank Coorporation.
+2. Find the names and cities of residence of all employees who work for First Bank Coorporation
+3. Find the names, street addresses, and cities of residence of all employees who work for First Bank Coorporation and earn more than $10000. 
+4.Find all employees in the database who lives in the same cities as tha companies for which they work.
+5.Find all employees in the database who lives in the same cities and on the same streets as do their manager. 
+6.Find all employees in the database who do not work for First Bank Coorporation
+7.Find all employees in the database who earn more than each employee of  Small  Bank  
+Coorporation
+8.Assume that the company is may be located in several cities. Find all companies located in every city in which Small Bank Coorporation is located.
+9.Find all employees who earn more than the average salary of all employees of their companies.
+10.Find the company that has the most employees.
+11.Find the company that has the smallest payroll.
+12.Find those companies whose employees earn a higher salary, on average, than the average salary at First Bank Coorporation. 
+13.Modify the database so that “Jones” now lives in Newtown.
+14.Give all employees of First Bank Coorporation” a 10% raise
+15.Delete all tuples in the “Works” relation for employees of “Small Bank Coorporation”.
+
+
+
+
+
+
+
+
+
+
+create table empl_34(emp_name varchar(20) primary key, emp_street varchar(20), emp_city varchar(15));
+create table comp_34(comp_name varchar(20) primary key, comp_city varchar(15));
+create table works_34(emp_name varchar(20) references empl_34(emp_name), comp_name varchar(20) references comp_34(comp_name), salary int);
+create table manages_34(emp_name varchar(20) references empl_34(emp_name), manager_name varchar(15));
+desc empl_34;
+desc comp_34;
+desc works_34;
+desc manages_34;
+insert into empl_34 values ('Avinash Kulkarni', 'GM Road', 'Pune');
+insert into empl_34 values ('Govind Pillai', 'Bandra', 'Mumbai');
+insert into empl_34 values ('Prathamesh Lonsane', 'Vitthalwadi', 'Delhi');
+insert into empl_34 values ('Amit Kumar', 'Khan Market', 'Delhi');
+insert into empl_34 values ('Adarsh Singh', 'Chelakara', 'Kannur');
+select * from empl_34;
+insert into comp_34 values ('Accenture', 'Pune');
+insert into comp_34 values ('TCS', 'Mumbai');
+insert into comp_34 values ('Nvidia', 'Delhi');
+insert into comp_34 values ('Barclays', 'Indore');
+insert into comp_34 values ('Google', 'Tokyo');
+select * from comp_34;
+insert into works_34 values ('Avinash Kulkarni', 'Barclays', 105000);
+insert into works_34 values ('Amit Kumar', 'TCS', 45000);
+insert into works_34 values ('Govind Pillai', 'Accenture', 61850);
+insert into works_34 values ('Prathamesh Lonsane', 'Google', 178500);
+insert into works_34 values ('Adarsh Singh', 'Nvidia', 95200);
+select * from works_34;
+alter table manages_34 modify manager_name varchar(30);
+insert into manages_34 values ('Avinash Kulkarni', 'Prathamesh Lonsane');
+insert into manages_34 values ('Amit Kumar', 'Adarsh Singh');
+insert into manages_34 values ('Govind Pillai', 'Jatin Patil');
+select* from manages_34;
+select emp_name from works_34 where comp_name = 'TCS';
+select W.emp_name, E.emp_city from empl_34 E, works_34 W where W.emp_name = E.emp_name and W.comp_name = 'TCS';
+select E.emp_name, E.emp_street, E.emp_city, W.salary from empl_34 E, works_34 W where W.emp_name = E.emp_name and W.salary > 30000 and W.comp_name = 'TCS';
+insert into empl_34 values ('Shardul Chavan', 'Akola', 'Nanded');
+insert into works_34 values ('Shardul Chavan', 'TCS', 87542);
+select E.emp_name, E.emp_street, E.emp_city, W.salary from empl_34 E, works_34 W where W.emp_name = E.emp_name and W.salary > 30000 and W.comp_name = 'TCS';
+select E.emp_name, E.emp_city, C.comp_city, W.comp_name from empl_34 E, works_34 W, comp_34 C where W.emp_name = E.emp_name and E.emp_city = C.comp_city;
+select E.emp_name, E.emp_street, E.emp_city, M.manager_name from empl_34 E, works_34 W, manages_34 M where W.emp_name = E.emp_name and E.emp_name = M.manager_name;
+select E.emp_name, E.emp_street, E.emp_city, M.manager_name from empl_34 E, works_34 W, manages_34 M where W.emp_name = E.emp_name and E.emp_name = M.manager_name;
+select emp_name from works_34 where comp_name != 'TCS';
+select comp_name, max(salary) from works_34 group by comp_name;
+select comp_name, max(salary) from works_34 group by comp_name having comp_name = 'Barclays';
+select comp_name from works_34 where salary > (select max(salary) from works_34 group by comp_name having comp_name = 'Barclays');
+select comp_name, emp_name from works_34 where salary > (select max(salary) from works_34 group by comp_name having comp_name = 'Barclays');
+select comp_city from comp_34 where comp_name='TCS';
+select comp_name from comp_34 where comp_city = (select comp_city from comp_34 where comp_name='TCS');
+insert into comp_34 values ('SAP Labs', 'Mumbai');
+select comp_name from comp_34 where comp_city = (select comp_city from comp_34 where comp_name='TCS');
+select avg(salary) from works_34 group by comp_name;
+select emp_name from works_34 where salary > ALL (select avg(salary) from works_34 group by comp_name having comp_name='TCS');
+select emp_name, salary from works_34 where salary > ALL (select avg(salary) from works_34 group by comp_name having comp_name='TCS');
+select comp_name, count(*) from works_34 group by comp_name;
+select max(count(*)) "no of employee" from works_34 group by comp_name;
+select min(salary) from works_34 group by comp_name;
+select comp_name, min(salary) from works_34 group by comp_name;
+select comp_name,salary from works_34 where salary <= ALL (select min(salary) from works_34 group by comp_name);
+select comp_name from works_34 where salary > (select avg(salary) from works_34 where comp_name = 'TCS');
+update empl_34 set emp_city='PCMC' where emp_name = 'Avinash Kulkarni';
+update works_34 set salary=salary+salary*0.1 where comp_name='TCS';
+select * from works_34;
+delete from works_34 where comp_name = 'Google';
+
