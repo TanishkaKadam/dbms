@@ -1,0 +1,54 @@
+/*Create database Employee.
+2.Create collection emp1 using createCollection method.
+3.Insert 4 to 5 documents in emp1 collection.(eno,ename,address,sal)
+4.display all documents.
+5.Insert document by creating own object id.
+6.Display all employess having salary greater than 5000
+7.Display all employess having salary less than 15000
+8.Display all employess having salary greater than 10000 and less than 20000.
+9.Update sal of all employee with 10%
+10.Delete employee having salary less than 5000.
+11.Rename collection emp1 with employee1.
+12.Display employee whose name start with n.
+13.sort name in ascending order.
+14.Create a new database with name Employee1.
+15.Drop employee1 database.
+16.Create collection emp1 using insert method.
+17.Drop collection emp1 */
+
+enter starting : mongosh
+
+use Employee
+db.createCollection("emp1")
+db.empl.insertMany([{eno:101, ename:"Chetan", address:"Vadgaon", sal:150000}, 
+{eno:102, ename:"Aradhya", address:"Talegaon", sal:140000}, 
+{eno:103, ename:"Prathamesh", address:"Akurdi", sal:110000}, 
+{eno:104, ename:"Adarsh", address:"Chinchwad", sal:100000}, 
+{eno:105, ename:"Jatin", address:"Pimpri", sal:115000}])
+
+db.empl.find().pretty()
+db.empl.insertOne({_id:2423, eno:106, ename:"Nishant", address:"Jalgaon", sal:520000})
+db.empl.find().pretty()
+db.empl.find({sal: {"$gt" : 120000}}).pretty()
+db.empl.find({sal: {"$lt" : 150000}}).pretty()
+db.empl.find({sal: {"$gt" : 110000, "$lt" : 200000}}).pretty()
+db.empl.updateMany({},{$mul: {sal: 1.1}})
+db.empl.find().pretty()
+db.empl.deleteOne({"sal": {"$lt" : 135000}})
+db.empl.find().pretty()
+db.empl.deleteMany({"sal": {"$lt" : 135000}})
+db.empl.find().pretty()
+db.empl.renameCollection("employee1")
+db.employee1.find({ename:/^N/}).pretty();
+db.employee1.find().sort({ename:1}).pretty()
+use Employee1
+db.dropDatabase()
+db.empl.insertOne({eno: 107, ename:"Onkar", address:"Pune", sal:134000})
+db.empl.drop()
+
+
+
+
+
+
+
