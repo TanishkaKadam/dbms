@@ -1,0 +1,35 @@
+/*Create a hypothetical sports club database that contains a users collection that tracks the user’s join dates, sport preferences, and stores these data in documents and perform the following operation on it using aggregation.
+1.	Create index on sport preferences.
+2.	Create index on join dates and preferences.
+3.  Returns user names in upper case and in alphabetical order.
+4.  Returns user names sorted by the month they joined.
+5. Show how many people joined each month of the year. */
+
+insert : mongosh
+
+use sports
+ db.sports.insertMany([{join_dates: "01-Jan-1998", sp_pref: "Football"}, {join_dates: "18-Aug-2000", sp_pref: "Hockey"}, {join_dates: "14-Jun-1985", sp_pref: "Cricket"}, {join_dates: "19-Dec-2003", sp_pref: "Kabaddi"}])
+db.sports.find().pretty()
+db.sports.createIndex({sp_pref:1})
+db.sports.find().pretty()
+db.sports.getIndexes()
+db.sports.createIndex({"sp_pref":1})
+db.sports.getIndexes()
+db.sports.insertOne({_id: 101, name: "ABC", join_dates: "01-Feb-1998", sp_pref: "Rugby"})
+db.sports.find().pretty()
+db.sports.dropIndex({_id:1})
+db.sports.createIndex({"join_dates": 1, "sp_pref":-1})
+db.sports.getIndexes()
+db.sports.find().pretty()
+db.sports.createIndex({"join_dates": 1, "_id":-1})
+db.sports.find().pretty()
+db.sports.aggregate([{$project: {sp_pref: { $toUpper: "$sp_pref" }}},{$sort: {sp_pref: 1 }}])
+db.sports.find().sort({join_dates:1}).pretty()
+db.sports.insertOne({_id:102, join_dates:"01-Feb-1998"})
+db.sports.find().pretty()
+db.sports.find().sort({join_dates:1}).pretty()
+db.sports.count()
+db.sports.find({join_dates:{$regex:/^01-Feb-1998/}}).pretty()
+db.sports.count({join_dates:{$regex:/^01-Feb-1998/}})
+
+
