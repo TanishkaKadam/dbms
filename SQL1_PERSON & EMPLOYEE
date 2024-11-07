@@ -1,0 +1,113 @@
+Design and Develop SQL DDL statements which demonstrate the use of SQL objects such as Table, View, Index, Sequence, Synonym.Create following tables with primary and foreign key and solve the queries given below 
+Person (driver_id, name, address)
+Car (license, model, year)
+Accident (report_no, date_acc, location)
+Owns (driver_id, license)
+Participated (driver_id,  model,  report_no, damage_amount)
+
+Employee (employee_name,street,city)
+Works (employee_name, company_name,salary)
+Company (company_name, city)
+Manages (employee_name, manager_name)
+
+1)	Create view with the employee_name, company_name  by using above tables.
+2)	 Create index for employee & participated table.
+3)	Create sequence for person & insert 4 records using sequence.
+4)	Create the synonym for table participated & company. Display the record using this table. Update the record using the synonym tables.
+5)	Drop index from employee table. 
+
+
+
+
+create table person(driver_id int primary key, name varchar(20), address varchar(10));
+desc person;
+insert into person values(101,'nilesh','pune');
+insert into person values(102,'ramesh','mumbai');
+insert into person values(103,'samarth','pune');
+insert into person values(104,'shivani','mumbai');
+insert into person values(105,'anvit','madras');
+select * from person;
+create table car(license varchar(20), model varchar(20), year int);
+desc car;
+insert into car values('abc123','breeza',2018);
+insert into car values('abc456','swift',2019);
+insert into car values('xyz456','creata',2019);
+insert into car values('xyz123','i20',2020);
+insert into car values('abcxyz123','audi',2020);
+select * from car;
+create	table accident(report_no	int	primary key,	date_acc	date, location
+varchar(20));
+desc accident;
+insert into accident values(11,'12/jan/2012','pune');
+insert into accident values(10,'1/jul/2018','pune');
+insert into accident values(23,'1/jul/2018','mumbai');
+insert into accident values(7,'9/aug/2019','nagpur');
+insert into accident values(6,'9/aug/2019','nashik');
+select * from accident;
+alter table car add constraint pk1 primary key(license); 
+create table owns(driver_id int references person(driver_id),
+license varchar(20) references car(license));
+desc owns;
+insert into owns values(101,'abc123');
+insert into owns values(103,'abc456');
+insert into owns values(102,'abcxyz123');
+select * from owns;
+create table participated(driver_id int references person(driver_id), model varchar(20),report_no int references accident(report_no),damage_amount int);
+desc participated;
+insert into participated values(101,'breeza',23,10000);
+insert into participated values(103,'swift',7,20000);
+insert into participated values(104,'i20',11,5000);
+select * from participated;
+create table employee(employee_name varchar(10) primary key,street varchar(15),city varchar(15));
+ desc employee;
+insert into employee values('nandini','JM road','pune');
+insert into employee values('anvit','FC road','pune');
+insert into employee values('aayushi','Fashion street','mumbai');
+insert into employee values('nilesh','xyz','nagar');
+insert into employee values('anvesh','abc','nashik');
+select * from employee; 
+
+create table company(company_name varchar(20) primary key,city varchar(10)); 
+desc company;
+insert into company values('cognizant','pune');
+insert into company values('accenture','pune');
+insert into company values('mahindra','mumbai');
+
+insert into company values('mindtree','mumbai');
+
+insert into company values('syntel','madras');
+select * from company; 
+create table works(employee_name varchar(20) references employee(employee_name),company_name varchar(20) references
+company(company_name),salary	int);	
+		
+insert into works values('aayushi','cognizant',45000);
+insert into works values('nandini','mahindra',50000);
+insert into works values('nilesh','mindtree',60000);
+select * from works;
+create table manages(employee_name varchar(20) references employee(employee_name),manager_name varchar(20));
+desc manages;
+insert into manages values('aayushi','xyz');
+insert into manages values('anvit','abc');
+insert into manages values('nandini','pqr');
+select * from manages; 
+	
+create view view1 as select employee_name,company_name from works; 
+select * from view1;
+create index emp_city_idx on employee(city);
+create index part_driver_id on participated(driver_id); 
+create sequence s1 increment by 10 start with 1 maxvalue 50 nocycle; 
+insert into person (driver_id) values (s1.nextval);
+select * from person;
+insert into person (driver_id) values (s1.nextval);
+insert into person (driver_id) values (s1.nextval);
+insert into person (driver_id) values (s1.nextval);
+select * from person;
+create synonym s1_part for participated; 
+select * from s1_part;
+update s1_part set damage_amount=25000 where report_no=11;
+select * from s1_part;
+create synonym s1_comp for company; 
+select * from s1_comp;
+update s1_comp set city='nashik' where company_name='accenture';
+select * from s1_comp;
+
