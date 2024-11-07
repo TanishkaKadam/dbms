@@ -8,7 +8,8 @@ edit a1.sql
 
 
 
-WRITE THIS FILE IN NOTE PAD 
+
+WRITE THIS FILE IN NOTE PAD with filename a1.sql
 /*
 declare
 r1 circlearea.radius%type;
@@ -24,6 +25,7 @@ insert into circlearea values(r1,cir_area);
 end loop;
 end;
 */
+
 
 
 
