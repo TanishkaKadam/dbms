@@ -1,0 +1,98 @@
+Create following tables with primary key and foreign key and solve below queries
+person (driver id, name, address) 
+car (license, model, year) 
+accident (report number, date, location) 
+owns (driver id, license)
+participated (report number, license, driver id, damage amount)
+
+Insert 5 records in each table
+Add unique key for name of person.
+Add not null constraints for address.
+Find the total number of people who owned cars that were involved in accidents in 2009. 
+Add a new accident to the database; assume any values for required attributes. 
+ Delete the Mazda belonging to “John Smith”
+
+
+
+
+
+
+
+CREATE TABLE person2 (
+      driver_id NUMBER PRIMARY KEY,
+        name VARCHAR2(10) UNIQUE,
+        address VARCHAR2(20) NOT NULL
+    );
+CREATE TABLE car2 (
+     license VARCHAR2(15) PRIMARY KEY,
+        model VARCHAR2(50),
+        year NUMBER(4)
+    );
+CREATE TABLE accident2 (
+        report_number NUMBER PRIMARY KEY,
+        accident_date DATE,
+        location VARCHAR2(10)
+    );
+ CREATE TABLE owns2 (
+       driver_id NUMBER,
+        license VARCHAR2(15),
+        PRIMARY KEY (driver_id, license),
+        FOREIGN KEY (driver_id) REFERENCES person2(driver_id),
+        FOREIGN KEY (license) REFERENCES car2(license)
+    );
+CREATE TABLE participated2 (
+        report_number NUMBER,
+        license VARCHAR2(15),
+        driver_id NUMBER,
+        damage_amount NUMBER(10, 2),
+        PRIMARY KEY (report_number, license, driver_id),
+        FOREIGN KEY (report_number) REFERENCES accident2(report_number),
+        FOREIGN KEY (license) REFERENCES car2(license),
+        FOREIGN KEY (driver_id) REFERENCES person2(driver_id)
+   );
+INSERT INTO person2 VALUES (1, 'John Smith', '123 Elm Street');
+ INSERT INTO person2 VALUES (2, 'Jane Doe', '456 Oak Avenue');
+INSERT INTO person2 VALUES (3, 'Alice', '789 Pine Road');
+INSERT INTO person2 VALUES (4, 'Bob White', '321 Maple Drive');
+INSERT INTO person2 VALUES (5, 'Carol', '654 Birch Lane');
+INSERT INTO car2 VALUES ('ABC123', 'Mazda', 2010);
+INSERT INTO car2 VALUES ('XYZ456', 'Toyota', 2008);
+INSERT INTO car2 VALUES ('LMN789', 'Honda', 2009);
+INSERT INTO car2 VALUES ('DEF321', 'Ford', 2011);
+INSERT INTO car2 VALUES ('GHI654', 'Nissan', 2007);
+INSERT INTO accident2 VALUES (101, TO_DATE('2009-06-15', 'YYYY-MM-DD'), 'Downtown');
+INSERT INTO accident2 VALUES (102, TO_DATE('2010-08-22', 'YYYY-MM-DD'), 'Uptown');
+INSERT INTO accident2 VALUES (103, TO_DATE('2009-11-02', 'YYYY-MM-DD'), 'Main St');
+INSERT INTO accident2 VALUES (104, TO_DATE('2011-03-18', 'YYYY-MM-DD'), 'Highway');
+INSERT INTO accident2 VALUES (105, TO_DATE('2008-12-25', 'YYYY-MM-DD'), 'Suburb');
+INSERT INTO owns2 VALUES (1, 'ABC123');
+ INSERT INTO owns2 VALUES (2, 'XYZ456');
+ INSERT INTO owns2 VALUES (3, 'LMN789');
+
+INSERT INTO owns2 VALUES (4, 'DEF321');
+INSERT INTO owns2 VALUES (5, 'GHI654');
+SELECT COUNT(DISTINCT p.driver_id) AS total_people
+   FROM person2 p
+    JOIN owns2 o ON p.driver_id = o.driver_id
+    JOIN participated2 pa ON o.license = pa.license
+    JOIN accident2 a ON pa.report_number = a.report_number
+    WHERE EXTRACT(YEAR FROM a.accident_date) = 2009;
+INSERT INTO accident2 (report_number, accident_date, location)VALUES (106, TO_DATE('2023-10-15', 'YYYY-MM-DD'), 'City Cen');
+
+ SELECT o.license
+    FROM person2 p
+    JOIN owns2 o ON p.driver_id = o.driver_id
+    JOIN car2 c ON o.license = c.license
+   WHERE p.name = 'John Smith' AND c.model = 'Mazda';
+
+DELETE FROM participated2
+    WHERE license = 'ABC123';
+
+ DELETE FROM owns2
+    WHERE driver_id = 1 AND license = 'ABC123';
+
+
+DELETE FROM car2
+    WHERE license = 'ABC123';
+
+
