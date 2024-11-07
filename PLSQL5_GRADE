@@ -1,0 +1,70 @@
+Write a Stored Procedure namely proc_Grade for the categorization of student. If marks scored by students in examination is • <=1500 and marks>=990 then student will be placed in Distinction category • if marks scored are between 989 and 900 category is First Class, • if marks 899 and 825 category is Higher Second Class. Write a PL/SQL block for using procedure created with above requirement. 1. Stud_Marks(Roll, Name, Total_marks) 2. Result(Roll, Name, Class) Frame the separate problem statement for writing PL/SQL Stored Procedure and function, inline with above statement. The problem statement should clearly state the requirements
+
+
+
+Stud_Marks(Roll, Name, Total_marks) 2. Result(Roll, Name, Class) Create table Stud_Marks (Roll number Primary Key, Name Varchar2(10), Total_marks number);
+Create table Result (Roll number references Stud_Marks(Roll), Name Varchar2(10), Class Varchar2(20));
+insert into Stud_Marks Values ( 1, 'Ajay', 1100 ); 
+insert into Stud_Marks Values ( 2, 'Ramesh', 950); 
+insert into Stud_Marks Values ( 3, 'Umesh', 850);
+ insert into Stud_Marks Values ( 4, 'Suresh', 400);
+select * from stud_marks;
+select * from result;
+edit proc1.sql
+
+
+
+
+
+
+
+WRITE THIS CODE IN NOTEPAD with FILENAME proc1
+/*
+create or replace procedure proc_grade(rno in stud_marks.roll%type, name1 in stud_marks.name%type) is 
+totmarks stud_marks.total_marks%type; 
+grade varchar2(15);
+ begin 
+select total_marks into totmarks from stud_marks where roll=rno and name=name1; 
+if(totmarks between 825 and 899) then 
+grade:='secondclass';
+ insert into result values(rno,name1,grade); 
+elsif(totmarks between 900 and 989) then 
+grade:='Firstclass';
+ insert into result values(rno,name1,grade); 
+elsif(totmarks between 990 and 1500)then 
+grade:='Distinction'; 
+insert into result values(rno,name1,grade);
+ else dbms_output.put_line('Fail'); 
+end if;
+ end proc_grade; /
+*/
+
+
+
+
+
+
+@proc1
+edit p1.sql
+
+
+
+
+
+
+WRITE THIS ALSO IN NOTPAD with FILENAME p1
+/*
+declare result varchar2(15); 
+totmarks number;
+ begin proc_grade(1,'Ajay'); 
+end; /
+*/
+
+
+
+
+
+
+@p1
+select * from result;
+
