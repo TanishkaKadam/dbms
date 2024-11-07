@@ -1,0 +1,33 @@
+/*Create database employee and create collection computer
+Define a map function to emit the "total" key and the "Salary" value for each document.
+Define a reduce function to sum the salaries associated with the "total" key.Execute the map-reduce operation on the "Computer" collection, specifying an output collection where the results will be stored.*/
+
+
+Use : mongosh
+
+
+use emp
+db.createCollection("computer")
+db.computer.insertMany([{Name:"SDB", Designation:"HOD", Age:40, Salary:90000}, 
+{Name:"SBN", Designation:"Asso Prof", Age:40, Salary:85000}, 
+{Name:"JSC", Designation:"Asso Prof", Age:30, Salary:75000},
+ {Name:"MSC", Designation:"Asso Prof", Age:42, Salary:75000},
+ {Name:"VND", Designation:"Asso Prof", Age:40, Salary:80000},
+ {Name:"VSK", Designation:"Asso Prof", Age:35, Salary:65000}])
+
+db.computer.find().pretty()
+var mapFunction = function () {
+emit("total", this.Salary);
+};
+var reduceFunction = function (key, values) {
+return Array.sum(values);
+};
+db.computer.mapReduce(
+mapFunction,
+reduceFunction,
+{
+out: "TotalSalaryResult"
+}
+);
+db.TotalSalaryResult.find().pretty();
+
