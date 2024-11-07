@@ -1,0 +1,87 @@
+/*Write a Stored Procedure namely proc_Grade for the categorization of student. If marks scored by students in examination is • <=1500 and marks>=990 then student will be placed in Distinction category • if marks scored 
+  are between 989 and 900 category is First Class, • if marks 899 and 825 category is Higher Second Class. Write a PL/SQL block for using procedure created with above requirement. 1. Stud_Marks(Roll, Name, Total_marks) 
+  2. Result(Roll, Name, Class) Frame the separate problem statement for writing PL/SQL Stored Procedure and function, inline with above statement. The problem statement should clearly state the requirements */
+
+
+
+SQL*Plus: Release 18.0.0.0.0 - Production on Mon Oct 14 09:37:40 2024 
+Version 18.4.0.0.0 
+Copyright (c) 1982, 2018, Oracle. All rights reserved. 
+Enter user-name: system 
+Enter password: 
+Last Successful login time: Mon Oct 14 2024 09:13:40 +05:30 
+Connected to: 
+Oracle Database 18c Express Edition Release 18.0.0.0.0 - Production 
+Version 18.4.0.0.0 
+Create table Cust_New(ID number, Name Varchar2(10), City Varchar2(10), Salary number); 
+Create table Cust_Old(ID number, Name Varchar2(10), City Varchar2(10), Salary number); 
+2. Insert records insert into Cust_New Values ( 1,'Ajay', 'Pune', 20000); insert into Cust_New Values ( 2,'Ramesh','Pune', 15000); insert into Cust_New Values ( 3,'Umesh', 'Pune', 40000); insert into Cust_New Values ( 4,'Ram', 'Pune', 25000); insert into Cust_Old Values ( 1,'Ramesh','Pune', 15000); insert into Cust_Old Values ( 5,'Sunil', 'Pune', 45000); 
+ 
+SQL> select * from cust_old; 
+SQL> select * from cust_new; 
+ 
+CREATE OR REPLACE PROCEDURE proc_grade(     rno IN Stud_Marks.Roll%TYPE,     name1 IN Stud_Marks.Name%TYPE 
+) IS 
+    totmarks Stud_Marks.Total_marks%TYPE;     grade VARCHAR2(15); 
+BEGIN 
+    -- Fetch the total marks for the given roll number and name 
+    SELECT Total_marks INTO totmarks FROM Stud_Marks WHERE Roll = rno AND Name = name1; 
+ 
+    -- Determine the grade based on total marks and insert it into the Result table     IF totmarks BETWEEN 825 AND 899 THEN 
+        grade := 'Second Class'; 
+        INSERT INTO Result VALUES (rno, name1, grade); 
+ 
+    ELSIF totmarks BETWEEN 900 AND 989 THEN 
+        grade := 'First Class'; 
+        INSERT INTO Result VALUES (rno, name1, grade); 
+ 
+    ELSIF totmarks BETWEEN 990 AND 1500 THEN 
+        grade := 'Distinction'; 
+        INSERT INTO Result VALUES (rno, name1, grade); 
+ 
+    ELSE 
+        DBMS_OUTPUT.PUT_LINE('Fail'); 
+    END IF; 
+END proc_grade; 
+/ 
+ 
+-- Step 4: Call the procedure for a specific student 
+DECLARE BEGIN 
+    proc_grade(1, 'Ajay');  -- Change values to test different entries 
+END; 
+/ 
+ 
+CREATE OR REPLACE FUNCTION fn_grade(rno IN Stud_Marks.Roll%TYPE, name1 IN 
+Stud_Marks.Name%TYPE) 
+RETURN VARCHAR2 IS     totmarks Stud_Marks.Total_Marks%TYPE;     grade VARCHAR2(15); 
+BEGIN 
+    -- Retrieve total marks for the given roll number and name 
+    SELECT Total_Marks INTO totmarks  
+    FROM Stud_Marks  
+    WHERE Roll = rno AND Name = name1; 
+     
+    -- Determine the grade based on total marks     IF totmarks BETWEEN 825 AND 899 THEN 
+        grade := 'Second Class'; 
+    ELSIF totmarks BETWEEN 900 AND 989 THEN 
+        grade := 'First Class'; 
+    ELSIF totmarks BETWEEN 990 AND 1500 THEN 
+        grade := 'Distinction';     ELSE         grade := 'Fail'; 
+    END IF; 
+     
+    -- Return the grade 
+    RETURN grade; 
+END fn_grade; 
+/ 
+ 
+ 
+DECLARE 
+    student_grade VARCHAR2(15); 
+BEGIN 
+    -- Call the function for student with roll number 1 and name 'Ajay'     student_grade := fn_grade(1, 'Ajay'); 
+     
+    -- Display the grade 
+    DBMS_OUTPUT.PUT_LINE('Grade: ' || student_grade); 
+END; 
+/ 
+ 
+
