@@ -1,0 +1,113 @@
+Design and Develop SQL DDL statements which demonstrate the use of SQL objects such as Table, View, Index, Sequence, Synonym.
+
+employee (person name, street, city)
+works (person name, company name, salary)
+company (company name, city) 
+branch (branch name, branch city, assets) 
+customer (customer name, customer street, customer city)
+loan (loan number, branch name, amount)
+ borrower (customer name, loan number) 
+account (account number, branch name, balance) 
+depositor (customer name, account number)
+
+Create view with the Customer name, customer street  by using above tables.
+ Create index for loan number.
+Create sequence for account & insert 4 records using sequence.
+Create the synonym for table depositor & borrower. Display the record using this table. Update the record using the synonym tables.
+Drop synonym for depositor table.
+
+
+
+
+
+
+CREATE TABLE employee1 (
+    person_name VARCHAR2(50),
+    street VARCHAR2(100),
+    city VARCHAR2(50)
+);
+
+CREATE TABLE works1 (
+    person_name VARCHAR2(50),
+    company_name VARCHAR2(50),
+    salary NUMBER(10, 2)
+);
+
+CREATE TABLE company1 (
+    company_name VARCHAR2(50),
+    city VARCHAR2(50)
+);
+
+CREATE TABLE branch1 (
+    branch_name VARCHAR2(50),
+    branch_city VARCHAR2(50),
+    assets NUMBER(15, 2)
+);
+
+CREATE TABLE customer1 (
+    customer_name VARCHAR2(50),
+    customer_street VARCHAR2(100),
+    customer_city VARCHAR2(50)
+);
+
+CREATE TABLE loan1 (
+    loan_number NUMBER(10),
+    branch_name VARCHAR2(50),
+    amount NUMBER(15, 2)
+);
+
+CREATE TABLE borrower1 (
+    customer_name VARCHAR2(50),
+    loan_number NUMBER(10)
+);
+
+CREATE TABLE account1 (
+    account_number NUMBER(10),
+    branch_name VARCHAR2(50),
+    balance NUMBER(15, 2)
+);
+
+CREATE TABLE depositor1 (
+    customer_name VARCHAR2(50),
+    account_number NUMBER(10)
+);
+
+CREATE VIEW customer_view1 AS
+SELECT customer_name, customer_street
+FROM customer1;
+
+CREATE INDEX loan_number_idx1 ON loan1(loan_number);
+
+CREATE SEQUENCE account_seq1
+START WITH 1
+INCREMENT BY 1;
+
+INSERT INTO account1 (account_number, branch_name, balance)
+VALUES (account_seq1.NEXTVAL, 'Branch A', 1000.00);
+
+INSERT INTO account1 (account_number, branch_name, balance)
+VALUES (account_seq1.NEXTVAL, 'Branch B', 2000.00);
+
+INSERT INTO account1 (account_number, branch_name, balance)
+VALUES (account_seq1.NEXTVAL, 'Branch C', 1500.00);
+
+INSERT INTO account1 (account_number, branch_name, balance)
+VALUES (account_seq1.NEXTVAL, 'Branch D', 3000.00);
+
+CREATE SYNONYM depositor_syn1 FOR depositor1;
+CREATE SYNONYM borrower_syn1 FOR borrower1;
+
+SELECT * FROM depositor_syn1;
+SELECT * FROM borrower_syn1;
+
+UPDATE depositor_syn1
+SET account_number = 123456
+WHERE customer_name = 'John Doe';
+
+UPDATE borrower_syn1
+SET loan_number = 789012
+WHERE customer_name = 'Jane Smith';
+
+DROP SYNONYM depositor_syn1;
+
+
