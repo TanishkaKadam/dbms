@@ -11,6 +11,7 @@ Write a PL/SQL block to calculate factorial. Use Exception Handling for negative
 
 
 
+
  Create table Borrower(Roll number, SName Varchar2(10), DateofIssue date, 
 BookName Varchar2(15), Status varchar2(1));
 Create table Fine(Roll number, CurrentDate date, Amt number);
@@ -23,8 +24,8 @@ select * from fine;
 
 
 
-3.Write PL/SQL block IN NOTEPAD
 
+3.Write PL/SQL block IN NOTEPAD with filename cur
 /*
 
 edit cur.sql
